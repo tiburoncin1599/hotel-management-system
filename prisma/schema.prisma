@@ -1,0 +1,875 @@
+// ============================================================
+// Hotel Management System - Prisma Schema
+// ============================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+enum HousekeepingTaskStatus {
+  PENDING
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum HousekeepingTaskType {
+  CLEANING
+  DEEP_CLEAN
+  MAINTENANCE
+  INSPECTION
+  TURN_DOWN
+}
+
+enum HousekeepingPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  REFUNDED
+  FAILED
+  CANCELLED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  PARTIALLY_PAID
+  CANCELLED
+  REFUNDED
+}
+
+enum BookingSource {
+  DIRECT
+  BOOKING_COM
+  EXPEDIA
+  AIRBNB
+  PHONE
+  EMAIL
+  OTHER
+}
+
+enum NotificationType {
+  BOOKING_CREATED
+  BOOKING_CONFIRMED
+  BOOKING_CANCELLED
+  CHECK_IN_DUE
+  CHECK_OUT_DUE
+  PAYMENT_RECEIVED
+  HOUSEKEEPING_ASSIGNED
+  SYSTEM_ALERT
+}
+
+// ============================================================
+// SECURITY & AUTH
+// ============================================================
+
+model Role {
+  id              String           @id @default(uuid())
+  name            String           @unique
+  description     String?
+  isSystem        Boolean          @default(false)
+  users           User[]
+  rolePermissions RolePermission[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([name])
+  @@map("roles")
+}
+
+model Permission {
+  id              String           @id @default(uuid())
+  code            String           @unique
+  name            String
+  module          String?
+  description     String?
+  rolePermissions RolePermission[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([code])
+  @@index([module])
+  @@map("permissions")
+}
+
+model RolePermission {
+  id           String     @id @default(uuid())
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
+  @@unique([roleId, permissionId])
+  @@index([roleId])
+  @@index([permissionId])
+  @@map("role_permissions")
+}
+
+model User {
+  id                        String                   @id @default(uuid())
+  email                     String                   @unique
+  passwordHash              String
+  isActive                  Boolean                  @default(true)
+  lastLoginAt               DateTime?
+  roleId                    String
+  role                      Role                     @relation(fields: [roleId], references: [id])
+  employee                  Employee?                @relation("UserEmployee")
+  createdBy                 User?                    @relation("UserCreatedBy", fields: [createdById], references: [id])
+  createdById               String?
+  updatedBy                 User?                    @relation("UserUpdatedBy", fields: [updatedById], references: [id])
+  updatedById               String?
+  deletedBy                 User?                    @relation("UserDeletedBy", fields: [deletedById], references: [id])
+  deletedById               String?
+  usersCreated              User[]                   @relation("UserCreatedBy")
+  usersUpdated              User[]                   @relation("UserUpdatedBy")
+  usersDeleted              User[]                   @relation("UserDeletedBy")
+  customersCreated          Customer[]               @relation("CustomerCreatedBy")
+  customersUpdated          Customer[]               @relation("CustomerUpdatedBy")
+  customersDeleted          Customer[]               @relation("CustomerDeletedBy")
+  employeesCreated          Employee[]               @relation("EmployeeCreatedBy")
+  employeesUpdated          Employee[]               @relation("EmployeeUpdatedBy")
+  employeesDeleted          Employee[]               @relation("EmployeeDeletedBy")
+  roomTypesCreated          RoomType[]               @relation("RoomTypeCreatedBy")
+  roomTypesUpdated          RoomType[]               @relation("RoomTypeUpdatedBy")
+  roomTypesDeleted          RoomType[]               @relation("RoomTypeDeletedBy")
+  roomsCreated              Room[]                   @relation("RoomCreatedBy")
+  roomsUpdated              Room[]                   @relation("RoomUpdatedBy")
+  roomsDeleted              Room[]                   @relation("RoomDeletedBy")
+  roomPriceHistoriesCreated RoomPriceHistory[]       @relation("RoomPriceHistoryCreatedBy")
+  promotionsCreated         Promotion[]              @relation("PromotionCreatedBy")
+  promotionsUpdated         Promotion[]              @relation("PromotionUpdatedBy")
+  promotionsDeleted         Promotion[]              @relation("PromotionDeletedBy")
+  bookingsCreated           Booking[]                @relation("BookingCreatedBy")
+  bookingsUpdated           Booking[]                @relation("BookingUpdatedBy")
+  bookingsDeleted           Booking[]                @relation("BookingDeletedBy")
+  invoicesCreated           Invoice[]                @relation("InvoiceCreatedBy")
+  servicesCreated           Service[]                @relation("ServiceCreatedBy")
+  servicesUpdated           Service[]                @relation("ServiceUpdatedBy")
+  servicesDeleted           Service[]                @relation("ServiceDeletedBy")
+  housekeepingTasksCreated  HousekeepingTask[]       @relation("HousekeepingTaskCreatedBy")
+  housekeepingTasksUpdated  HousekeepingTask[]       @relation("HousekeepingTaskUpdatedBy")
+  statusHistories           BookingStatusHistory[]   @relation("StatusChangedBy")
+  notifications             Notification[]
+  auditLogs                 AuditLog[]
+  createdAt                 DateTime                 @default(now())
+  updatedAt                 DateTime                 @updatedAt
+  deletedAt                 DateTime?
+
+  @@index([email])
+  @@index([roleId])
+  @@index([isActive])
+  @@map("users")
+}
+
+// ============================================================
+// EMPLOYEES
+// ============================================================
+
+model Employee {
+  id                              String               @id @default(uuid())
+  firstName                       String
+  lastName                        String
+  email                           String               @unique
+  phone                           String?
+  position                        String?
+  hireDate                        DateTime?
+  isActive                        Boolean              @default(true)
+  userId                          String               @unique
+  user                            User                 @relation("UserEmployee", fields: [userId], references: [id])
+  createdBy                       User?                @relation("EmployeeCreatedBy", fields: [createdById], references: [id])
+  createdById                     String?
+  updatedBy                       User?                @relation("EmployeeUpdatedBy", fields: [updatedById], references: [id])
+  updatedById                     String?
+  deletedBy                       User?                @relation("EmployeeDeletedBy", fields: [deletedById], references: [id])
+  deletedById                     String?
+  checkInsProcessed               CheckIn[]            @relation("CheckInProcessedBy")
+  checkOutsProcessed              CheckOut[]           @relation("CheckOutProcessedBy")
+  paymentsProcessed               Payment[]            @relation("PaymentProcessedBy")
+  serviceConsumptionsAuthorized   ServiceConsumption[] @relation("ServiceConsumptionAuthorizedBy")
+  housekeepingTasksAssigned       HousekeepingTask[]   @relation("HousekeepingTaskAssignedTo")
+  createdAt                       DateTime             @default(now())
+  updatedAt                       DateTime             @updatedAt
+  deletedAt                       DateTime?
+
+  @@index([email])
+  @@index([lastName, firstName])
+  @@index([isActive])
+  @@map("employees")
+}
+
+// ============================================================
+// CUSTOMERS & GEOGRAPHY
+// ============================================================
+
+model Country {
+  id        String     @id @default(uuid())
+  code      String     @unique
+  name      String
+  phoneCode String?
+  isActive  Boolean    @default(true)
+  customers Customer[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([code])
+  @@map("countries")
+}
+
+model Customer {
+  id             String     @id @default(uuid())
+  firstName      String
+  lastName       String
+  email          String?
+  phone          String?
+  documentType   String?
+  documentNumber String?
+  address        String?
+  birthDate      DateTime?
+  countryId      String?
+  country        Country?   @relation(fields: [countryId], references: [id])
+  isActive       Boolean    @default(true)
+  createdBy      User?      @relation("CustomerCreatedBy", fields: [createdById], references: [id])
+  createdById    String?
+  updatedBy      User?      @relation("CustomerUpdatedBy", fields: [updatedById], references: [id])
+  updatedById    String?
+  deletedBy      User?      @relation("CustomerDeletedBy", fields: [deletedById], references: [id])
+  deletedById    String?
+  bookings       Booking[]
+  invoices       Invoice[]
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  deletedAt      DateTime?
+
+  @@index([documentType, documentNumber])
+  @@index([lastName, firstName])
+  @@index([email])
+  @@index([countryId])
+  @@map("customers")
+}
+
+// ============================================================
+// CURRENCY
+// ============================================================
+
+model Currency {
+  id               String        @id @default(uuid())
+  code             String        @unique
+  name             String
+  symbol           String
+  decimalPlaces    Int           @default(2)
+  exchangeRate     Decimal?
+  isBase           Boolean       @default(false)
+  isActive         Boolean       @default(true)
+  roomTypes        RoomType[]
+  roomPriceHistories RoomPriceHistory[]
+  promotions       Promotion[]
+  payments         Payment[]
+  invoices         Invoice[]
+  hotelConfigs     HotelConfiguration[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([code])
+  @@map("currencies")
+}
+
+// ============================================================
+// ROOM TYPES & AMENITIES
+// ============================================================
+
+model RoomType {
+  id                 String              @id @default(uuid())
+  name               String              @unique
+  description        String?
+  basePricePerNight  Decimal
+  maxOccupancy       Int
+  maxAdults          Int?
+  maxChildren        Int?
+  size               Int?
+  currencyId         String?
+  currency           Currency?           @relation(fields: [currencyId], references: [id])
+  isActive           Boolean             @default(true)
+  createdBy          User?               @relation("RoomTypeCreatedBy", fields: [createdById], references: [id])
+  createdById        String?
+  updatedBy          User?               @relation("RoomTypeUpdatedBy", fields: [updatedById], references: [id])
+  updatedById        String?
+  deletedBy          User?               @relation("RoomTypeDeletedBy", fields: [deletedById], references: [id])
+  deletedById        String?
+  rooms              Room[]
+  roomTypeAmenities  RoomTypeAmenity[]
+  promotionRoomTypes PromotionRoomType[]
+  roomPriceHistories RoomPriceHistory[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  deletedAt          DateTime?
+
+  @@index([name])
+  @@index([isActive])
+  @@index([currencyId])
+  @@index([basePricePerNight])
+  @@map("room_types")
+}
+
+model Amenity {
+  id               String             @id @default(uuid())
+  name             String
+  description      String?
+  icon             String?
+  category         String?
+  isActive         Boolean            @default(true)
+  roomTypeAmenities RoomTypeAmenity[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  deletedAt        DateTime?
+
+  @@index([name])
+  @@index([category])
+  @@map("amenities")
+}
+
+model RoomTypeAmenity {
+  id         String   @id @default(uuid())
+  roomTypeId String
+  amenityId  String
+  roomType   RoomType @relation(fields: [roomTypeId], references: [id], onDelete: Cascade)
+  amenity    Amenity  @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([roomTypeId, amenityId])
+  @@index([roomTypeId])
+  @@index([amenityId])
+  @@map("room_type_amenities")
+}
+
+// ============================================================
+// ROOMS & IMAGES
+// ============================================================
+
+model RoomStatus {
+  id        String  @id @default(uuid())
+  code      String  @unique
+  name      String
+  description String?
+  isActive  Boolean @default(true)
+  rooms     Room[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([code])
+  @@map("room_statuses")
+}
+
+model Room {
+  id                String             @id @default(uuid())
+  roomNumber        String             @unique
+  floor             Int?
+  roomTypeId        String
+  roomType          RoomType           @relation(fields: [roomTypeId], references: [id])
+  statusId          String
+  status            RoomStatus         @relation(fields: [statusId], references: [id])
+  isActive          Boolean            @default(true)
+  createdBy         User?              @relation("RoomCreatedBy", fields: [createdById], references: [id])
+  createdById       String?
+  updatedBy         User?              @relation("RoomUpdatedBy", fields: [updatedById], references: [id])
+  updatedById       String?
+  deletedBy         User?              @relation("RoomDeletedBy", fields: [deletedById], references: [id])
+  deletedById       String?
+  images            RoomImage[]
+  bookings          Booking[]
+  housekeepingTasks HousekeepingTask[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  deletedAt         DateTime?
+
+  @@index([roomNumber])
+  @@index([roomTypeId])
+  @@index([statusId])
+  @@index([floor])
+  @@map("rooms")
+}
+
+model RoomImage {
+  id        String  @id @default(uuid())
+  roomId    String
+  room      Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  isPrimary Boolean @default(false)
+  sortOrder Int     @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([roomId])
+  @@index([isPrimary])
+  @@map("room_images")
+}
+
+model RoomPriceHistory {
+  id            String   @id @default(uuid())
+  roomTypeId    String
+  roomType      RoomType @relation(fields: [roomTypeId], references: [id])
+  pricePerNight Decimal
+  currencyId    String?
+  currency      Currency? @relation(fields: [currencyId], references: [id])
+  effectiveDate DateTime
+  reason        String?
+  createdBy     User?    @relation("RoomPriceHistoryCreatedBy", fields: [createdById], references: [id])
+  createdById   String?
+  createdAt     DateTime @default(now())
+
+  @@index([roomTypeId])
+  @@index([effectiveDate])
+  @@index([roomTypeId, effectiveDate])
+  @@map("room_price_histories")
+}
+
+// ============================================================
+// PROMOTIONS
+// ============================================================
+
+model Promotion {
+  id                 String              @id @default(uuid())
+  code               String              @unique
+  name               String
+  description        String?
+  discountType       DiscountType
+  discountValue      Decimal
+  currencyId         String?
+  currency           Currency?           @relation(fields: [currencyId], references: [id])
+  startDate          DateTime
+  endDate            DateTime
+  minNights          Int?
+  minAmount          Decimal?
+  isActive           Boolean             @default(true)
+  maxUsage           Int?
+  usageCount         Int                 @default(0)
+  createdBy          User?               @relation("PromotionCreatedBy", fields: [createdById], references: [id])
+  createdById        String?
+  updatedBy          User?               @relation("PromotionUpdatedBy", fields: [updatedById], references: [id])
+  updatedById        String?
+  deletedBy          User?               @relation("PromotionDeletedBy", fields: [deletedById], references: [id])
+  deletedById        String?
+  promotionRoomTypes PromotionRoomType[]
+  bookings           Booking[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  deletedAt          DateTime?
+
+  @@index([code])
+  @@index([startDate, endDate])
+  @@index([isActive])
+  @@map("promotions")
+}
+
+model PromotionRoomType {
+  id           String    @id @default(uuid())
+  promotionId  String
+  roomTypeId   String
+  promotion    Promotion @relation(fields: [promotionId], references: [id], onDelete: Cascade)
+  roomType     RoomType  @relation(fields: [roomTypeId], references: [id], onDelete: Cascade)
+  createdAt    DateTime  @default(now())
+
+  @@unique([promotionId, roomTypeId])
+  @@index([promotionId])
+  @@index([roomTypeId])
+  @@map("promotion_room_types")
+}
+
+// ============================================================
+// BOOKINGS
+// ============================================================
+
+model BookingStatus {
+  id              String                @id @default(uuid())
+  code            String                @unique
+  name            String
+  description     String?
+  color           String?
+  isActive        Boolean               @default(true)
+  bookings        Booking[]
+  fromHistories   BookingStatusHistory[] @relation("FromStatus")
+  toHistories     BookingStatusHistory[] @relation("ToStatus")
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  @@index([code])
+  @@map("booking_statuses")
+}
+
+model Booking {
+  id                 String                @id @default(uuid())
+  customerId         String
+  customer           Customer              @relation(fields: [customerId], references: [id])
+  roomId             String
+  room               Room                  @relation(fields: [roomId], references: [id])
+  statusId           String
+  status             BookingStatus         @relation(fields: [statusId], references: [id])
+  promotionId        String?
+  promotion          Promotion?            @relation(fields: [promotionId], references: [id])
+  source             BookingSource         @default(DIRECT)
+  checkInDate        DateTime
+  checkOutDate       DateTime
+  numberOfGuests     Int                   @default(1)
+  totalAmount        Decimal
+  paidAmount         Decimal               @default(0)
+  specialRequests    String?
+  notes              String?
+  createdBy          User                  @relation("BookingCreatedBy", fields: [createdById], references: [id])
+  createdById        String
+  updatedBy          User?                 @relation("BookingUpdatedBy", fields: [updatedById], references: [id])
+  updatedById        String?
+  deletedBy          User?                 @relation("BookingDeletedBy", fields: [deletedById], references: [id])
+  deletedById        String?
+  statusHistories    BookingStatusHistory[]
+  checkIn            CheckIn?
+  checkOut           CheckOut?
+  payments           Payment[]
+  invoice            Invoice?
+  serviceConsumptions ServiceConsumption[]
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  deletedAt          DateTime?
+
+  @@index([customerId])
+  @@index([roomId])
+  @@index([statusId])
+  @@index([checkInDate, checkOutDate])
+  @@index([createdAt])
+  @@index([promotionId])
+  @@index([source])
+  @@map("bookings")
+}
+
+model BookingStatusHistory {
+  id           String        @id @default(uuid())
+  bookingId    String
+  booking      Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  fromStatusId String?
+  fromStatus   BookingStatus? @relation("FromStatus", fields: [fromStatusId], references: [id])
+  toStatusId   String
+  toStatus     BookingStatus @relation("ToStatus", fields: [toStatusId], references: [id])
+  notes        String?
+  changedBy    User          @relation("StatusChangedBy", fields: [changedById], references: [id])
+  changedById  String
+  changedAt    DateTime      @default(now())
+
+  @@index([bookingId])
+  @@index([changedAt])
+  @@index([toStatusId])
+  @@map("booking_status_histories")
+}
+
+// ============================================================
+// CHECK-IN / CHECK-OUT
+// ============================================================
+
+model CheckIn {
+  id                  String   @id @default(uuid())
+  bookingId           String   @unique
+  booking             Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  employeeId          String
+  employee            Employee @relation("CheckInProcessedBy", fields: [employeeId], references: [id])
+  checkInDateTime     DateTime @default(now())
+  expectedCheckOutDate DateTime?
+  idCardVerified      Boolean  @default(false)
+  notes               String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([bookingId])
+  @@index([employeeId])
+  @@index([checkInDateTime])
+  @@map("check_ins")
+}
+
+model CheckOut {
+  id              String   @id @default(uuid())
+  bookingId       String   @unique
+  booking         Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  employeeId      String
+  employee        Employee @relation("CheckOutProcessedBy", fields: [employeeId], references: [id])
+  checkOutDateTime DateTime @default(now())
+  damageCharges   Decimal?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([bookingId])
+  @@index([employeeId])
+  @@index([checkOutDateTime])
+  @@map("check_outs")
+}
+
+// ============================================================
+// PAYMENTS
+// ============================================================
+
+model PaymentMethod {
+  id        String    @id @default(uuid())
+  code      String    @unique
+  name      String
+  description String?
+  isActive  Boolean   @default(true)
+  payments  Payment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([code])
+  @@map("payment_methods")
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  bookingId       String
+  booking         Booking       @relation(fields: [bookingId], references: [id])
+  paymentMethodId String
+  paymentMethod   PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  status          PaymentStatus @default(COMPLETED)
+  amount          Decimal
+  currencyId      String?
+  currency        Currency?     @relation(fields: [currencyId], references: [id])
+  exchangeRate    Decimal?
+  transactionDate DateTime      @default(now())
+  referenceNumber String?
+  notes           String?
+  processedBy     Employee      @relation("PaymentProcessedBy", fields: [processedById], references: [id])
+  processedById   String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([bookingId])
+  @@index([paymentMethodId])
+  @@index([transactionDate])
+  @@index([processedById])
+  @@index([status])
+  @@index([currencyId])
+  @@map("payments")
+}
+
+// ============================================================
+// INVOICES
+// ============================================================
+
+model Invoice {
+  id              String          @id @default(uuid())
+  invoiceNumber   String          @unique
+  bookingId       String          @unique
+  booking         Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  customerId      String
+  customer        Customer        @relation(fields: [customerId], references: [id])
+  customerNameAtIssue String?
+  customerDocAtIssue  String?
+  issueDate       DateTime        @default(now())
+  dueDate         DateTime?
+  status          InvoiceStatus   @default(DRAFT)
+  subtotal        Decimal
+  taxAmount       Decimal         @default(0)
+  discountAmount  Decimal         @default(0)
+  totalAmount     Decimal
+  currencyId      String?
+  currency        Currency?       @relation(fields: [currencyId], references: [id])
+  exchangeRate    Decimal?
+  notes           String?
+  createdBy       User            @relation("InvoiceCreatedBy", fields: [createdById], references: [id])
+  createdById     String
+  details         InvoiceDetail[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  deletedAt       DateTime?
+
+  @@index([invoiceNumber])
+  @@index([bookingId])
+  @@index([customerId])
+  @@index([issueDate])
+  @@index([status])
+  @@index([currencyId])
+  @@map("invoices")
+}
+
+model InvoiceDetail {
+  id                    String              @id @default(uuid())
+  invoiceId             String
+  invoice               Invoice             @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description           String
+  quantity              Int                 @default(1)
+  unitPrice             Decimal
+  taxRate               Decimal             @default(0)
+  discountAmount        Decimal             @default(0)
+  totalAmount           Decimal
+  lineType              String              @default("room")
+  serviceConsumptionId  String?   @unique
+  serviceConsumption    ServiceConsumption? @relation(fields: [serviceConsumptionId], references: [id])
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+
+  @@index([invoiceId])
+  @@index([serviceConsumptionId])
+  @@map("invoice_details")
+}
+
+// ============================================================
+// SERVICES & CONSUMPTION
+// ============================================================
+
+model Service {
+  id                String               @id @default(uuid())
+  code              String               @unique
+  name              String
+  description       String?
+  category          String?
+  unitPrice         Decimal
+  isActive          Boolean              @default(true)
+  createdBy         User?                @relation("ServiceCreatedBy", fields: [createdById], references: [id])
+  createdById       String?
+  updatedBy         User?                @relation("ServiceUpdatedBy", fields: [updatedById], references: [id])
+  updatedById       String?
+  deletedBy         User?                @relation("ServiceDeletedBy", fields: [deletedById], references: [id])
+  deletedById       String?
+  consumptions      ServiceConsumption[]
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  deletedAt         DateTime?
+
+  @@index([code])
+  @@index([category])
+  @@index([isActive])
+  @@map("services")
+}
+
+model ServiceConsumption {
+  id               String              @id @default(uuid())
+  bookingId        String
+  booking          Booking             @relation(fields: [bookingId], references: [id])
+  serviceId        String
+  service          Service             @relation(fields: [serviceId], references: [id])
+  quantity         Int                 @default(1)
+  unitPrice        Decimal
+  totalPrice       Decimal
+  consumptionDateTime DateTime          @default(now())
+  notes            String?
+  invoiceDetail    InvoiceDetail?
+  authorizedBy     Employee            @relation("ServiceConsumptionAuthorizedBy", fields: [authorizedById], references: [id])
+  authorizedById   String
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@index([bookingId])
+  @@index([serviceId])
+  @@index([consumptionDateTime])
+  @@index([authorizedById])
+  @@map("service_consumptions")
+}
+
+// ============================================================
+// HOUSEKEEPING
+// ============================================================
+
+model HousekeepingTask {
+  id            String                  @id @default(uuid())
+  roomId        String
+  room          Room                    @relation(fields: [roomId], references: [id])
+  assignedToId  String?
+  assignedTo    Employee?               @relation("HousekeepingTaskAssignedTo", fields: [assignedToId], references: [id])
+  taskType      HousekeepingTaskType
+  status        HousekeepingTaskStatus  @default(PENDING)
+  priority      HousekeepingPriority   @default(MEDIUM)
+  scheduledDate DateTime
+  startedAt     DateTime?
+  completedAt   DateTime?
+  observations  String?
+  createdBy     User?                   @relation("HousekeepingTaskCreatedBy", fields: [createdById], references: [id])
+  createdById   String?
+  updatedBy     User?                   @relation("HousekeepingTaskUpdatedBy", fields: [updatedById], references: [id])
+  updatedById   String?
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+  deletedAt     DateTime?
+
+  @@index([roomId])
+  @@index([assignedToId])
+  @@index([status])
+  @@index([taskType])
+  @@index([scheduledDate])
+  @@index([priority])
+  @@map("housekeeping_tasks")
+}
+
+// ============================================================
+// CONFIGURATION & SYSTEM
+// ============================================================
+
+model HotelConfiguration {
+  id                String    @id @default(uuid())
+  configKey         String    @unique
+  configValue       String
+  description       String?
+  dataType          String    @default("string")
+  defaultCurrencyId String?
+  defaultCurrency   Currency? @relation(fields: [defaultCurrencyId], references: [id])
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([configKey])
+  @@map("hotel_configurations")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  message   String?
+  link      String?
+  isRead    Boolean          @default(false)
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  entity    String
+  entityId  String?
+  oldValues String?
+  newValues String?
+  ipAddress String?
+  userAgent String?
+  timestamp DateTime @default(now())
+
+  @@index([entity, entityId])
+  @@index([userId])
+  @@index([timestamp])
+  @@index([action])
+  @@map("audit_logs")
+}

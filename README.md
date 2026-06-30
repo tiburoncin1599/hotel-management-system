@@ -1,36 +1,199 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hotel Management System
 
-## Getting Started
+Sistema de gestión hotelera integral con módulos de reservas, check-in/check-out, pagos y facturación. Construido con Next.js 15, Prisma 7 y PostgreSQL.
 
-First, run the development server:
+## 🏗️ Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+| Frontend                  | Backend             | BD                 | Auth              |
+| ------------------------- | ------------------- | ------------------ | ----------------- |
+| Next.js 15.5 (App Router) | Server Actions      | PostgreSQL 15      | NextAuth v5       |
+| React 19 + TypeScript 5   | Prisma 7 ORM        | @prisma/adapter-pg | Credentials + JWT |
+| TailwindCSS v4            | Zod 4               | Migraciones        | bcryptjs          |
+| Recharts                  | Vitest + Playwright | —                  | Middleware Edge   |
+
+## 📁 Estructura
+
+```
+src/
+  app/                        → Rutas (App Router)
+    (dashboard)/dashboard/X/  → Páginas por módulo
+  components/
+    layout/                   → Sidebar, Navbar
+    ui/                       → StatCard, Badge, Skeleton, EmptyState
+  features/
+    X/                        → Módulo con capas:
+      types/                  →   Interfaces
+      schemas/                →   Validación Zod
+      repositories/           →   Consultas Prisma
+      services/               →   Lógica de negocio
+      actions/                →   Server Actions
+      components/             →   Componentes React
+  lib/
+    prisma.ts                 → Cliente Prisma singleton
+    auth/                     → NextAuth config + helpers
+    logger.ts                 → Logger centralizado
+  middleware.ts               → Edge auth middleware
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Funcionalidades
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Dashboard
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Métricas en tiempo real: habitaciones, ingresos, ocupación
+- 4 gráficos interactivos (Recharts): reservas por mes, ingresos, métodos de pago, top habitaciones
+- Feed de actividad reciente
+- Anillo de ocupación SVG
 
-## Learn More
+### Habitaciones
 
-To learn more about Next.js, take a look at the following resources:
+- CRUD completo con tipos, estados y precios
+- Historial de precios por habitación
+- Soft delete con auditoría
+- Búsqueda y filtros
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Clientes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- CRUD con documentos (DNI, pasaporte, etc.)
+- Selección de país
+- Búsqueda por nombre, email o documento
+- Soft delete
 
-## Deploy on Vercel
+### Reservas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- CRUD con detección de superposición de fechas
+- Promociones y descuentos
+- Historial de cambios de estado
+- Cancelación con motivo
+- Cálculo automático de noches y totales
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Check-In / Check-Out
+
+- Check-in transaccional (bloquea habitación)
+- Check-out con cargos por daños
+- Timeline de estadía
+- Sección por estados (pendientes, activos, salida)
+
+### Pagos
+
+- CRUD con métodos de pago y monedas
+- Resumen financiero por reserva
+- Cancelación/reembolso con ajuste de saldo
+- Transacciones atómicas (pago + actualización de booking)
+
+### Facturación (PDF)
+
+- Generación automática desde reserva
+- Número secuencial `FAC-{año}-{0001}`
+- PDF imprimible con `@media print`
+- Anulación con motivo
+- Integración en detalle de reserva
+
+## 🚀 Instalación
+
+```bash
+# 1. Clonar
+git clone https://github.com/tuusuario/hotel-management-system.git
+cd hotel-management-system
+
+# 2. Instalar dependencias
+npm install
+
+# 3. Configurar variables de entorno
+cp .env.example .env
+# Editar DATABASE_URL y AUTH_SECRET
+
+# 4. Migrar BD
+npx prisma migrate dev
+
+# 5. Seed (datos demo)
+npm run seed
+
+# 6. Iniciar
+npm run dev
+```
+
+## 🔧 Scripts
+
+| Comando            | Descripción                    |
+| ------------------ | ------------------------------ |
+| `npm run dev`      | Desarrollo en `localhost:3000` |
+| `npm run build`    | Build de producción            |
+| `npm run start`    | Iniciar servidor producción    |
+| `npm run lint`     | ESLint                         |
+| `npm run format`   | Prettier                       |
+| `npm test`         | Vitest (watch)                 |
+| `npm run test:run` | Vitest (run)                   |
+| `npm run test:e2e` | Playwright E2E                 |
+| `npm run seed`     | Poblar BD con datos demo       |
+
+## 🌐 Variables de Entorno
+
+```bash
+DATABASE_URL="postgresql://user:password@localhost:5432/hotel_management?schema=public"
+AUTH_SECRET="openssl rand -hex 32"
+AUTH_URL="http://localhost:3000"
+```
+
+## 📸 Capturas
+
+> _(Agregar capturas de pantalla aquí)_
+
+<!--
+![Dashboard](docs/screenshots/dashboard.png)
+![Habitaciones](docs/screenshots/rooms.png)
+![Reservas](docs/screenshots/bookings.png)
+![Factura PDF](docs/screenshots/invoice-pdf.png)
+-->
+
+## 📦 Despliegue
+
+### Vercel
+
+1. Conectar repositorio a Vercel
+2. Añadir variables de entorno
+3. Migrar BD: `npx prisma migrate deploy`
+4. Seed: `npm run seed`
+
+### Requisitos
+
+- Node.js 20+
+- PostgreSQL 15+
+- Cuenta Vercel
+
+## 🧪 Testing
+
+```bash
+# Unit tests
+npm test
+
+# E2E tests
+npm run test:e2e
+```
+
+## 📚 Documentación
+
+- [Arquitectura](docs/architecture.md)
+- [Base de datos](docs/database.md)
+- [API (Server Actions)](docs/api.md)
+- [Despliegue](docs/deployment.md)
+- [Convenciones](docs/conventions.md)
+
+## 🗺️ Roadmap
+
+- [x] Dashboard con métricas reales y gráficos
+- [x] Módulo de habitaciones
+- [x] Módulo de clientes
+- [x] Módulo de reservas con promociones
+- [x] Check-In / Check-Out transaccional
+- [x] Módulo de pagos con resumen financiero
+- [x] Facturación con vista PDF
+- [ ] Housekeeping (limpieza y mantenimiento)
+- [ ] Servicios y consumos (room service)
+- [ ] Reportes exportables (CSV/Excel)
+- [ ] Notificaciones email
+- [ ] Modo oscuro
+- [ ] API REST pública
+
+## 📄 Licencia
+
+MIT
