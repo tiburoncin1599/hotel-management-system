@@ -13,12 +13,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://hotel-management-system-ten-flax.vercel.app'),
   title: {
-    template: '%s | Hotel Management System',
-    default: 'Hotel Management System',
+    template: '%s | Grand Hotel - Sistema de Gestión Hotelera',
+    default: 'Grand Hotel - Sistema de Gestión Hotelera',
   },
   description:
-    'Sistema de gestión hotelera completo con módulos de reservas, check-in/out, pagos y facturación. Desarrollado con Next.js, Prisma y PostgreSQL.',
+    'Sistema de gestión hotelera profesional con módulos de reservas, check-in/out, pagos, facturación, reportes y configuración. Desarrollado con Next.js, Prisma y PostgreSQL.',
   keywords: [
     'hotel',
     'gestión hotelera',
@@ -27,7 +28,29 @@ export const metadata: Metadata = {
     'facturación',
     'Next.js',
     'Prisma',
+    'PostgreSQL',
+    'sistema hotelero',
   ],
+  authors: [{ name: 'Hotel Management System' }],
+  creator: 'Hotel Management System',
+  publisher: 'Hotel Management System',
+  openGraph: {
+    type: 'website',
+    locale: 'es_MX',
+    siteName: 'Grand Hotel',
+    title: 'Grand Hotel - Sistema de Gestión Hotelera',
+    description: 'Sistema profesional de gestión hotelera con módulos completos de administración.',
+    url: 'https://hotel-management-system-ten-flax.vercel.app',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Grand Hotel - Sistema de Gestión Hotelera',
+    description: 'Sistema profesional de gestión hotelera.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
