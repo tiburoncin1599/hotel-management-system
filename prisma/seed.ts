@@ -144,6 +144,26 @@ async function main() {
     });
   }
 
+  // --- Payment Methods ---
+  const paymentMethods = [
+    { code: 'CASH', name: 'Efectivo', description: 'Pago en efectivo' },
+    { code: 'CREDIT_CARD', name: 'Tarjeta de crédito', description: 'Pago con tarjeta de crédito' },
+    { code: 'DEBIT_CARD', name: 'Tarjeta de débito', description: 'Pago con tarjeta de débito' },
+    {
+      code: 'TRANSFER',
+      name: 'Transferencia bancaria',
+      description: 'Pago por transferencia bancaria',
+    },
+    { code: 'CHECK', name: 'Cheque', description: 'Pago con cheque' },
+  ];
+  for (const pm of paymentMethods) {
+    await prisma.paymentMethod.upsert({
+      where: { code: pm.code },
+      update: { name: pm.name, description: pm.description },
+      create: pm,
+    });
+  }
+
   // --- Amenities ---
   const amenityData = [
     { name: 'WiFi', icon: 'wifi', category: 'general' },
