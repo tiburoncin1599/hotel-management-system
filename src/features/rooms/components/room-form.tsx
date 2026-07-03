@@ -69,7 +69,7 @@ export function RoomForm({ statuses, types, room }: RoomFormProps) {
               defaultValue={room?.roomNumber ?? ''}
               required
               placeholder="Ej: 101"
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
 
@@ -84,7 +84,7 @@ export function RoomForm({ statuses, types, room }: RoomFormProps) {
               min={0}
               defaultValue={room?.floor ?? ''}
               placeholder="Ej: 1"
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
 
@@ -97,7 +97,7 @@ export function RoomForm({ statuses, types, room }: RoomFormProps) {
               name="roomTypeId"
               required
               defaultValue={room?.roomTypeId ?? ''}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
             >
               <option value="">Seleccionar tipo</option>
               {types.map((t) => (
@@ -117,7 +117,7 @@ export function RoomForm({ statuses, types, room }: RoomFormProps) {
               name="statusId"
               required
               defaultValue={room?.statusId ?? ''}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
             >
               <option value="">Seleccionar estado</option>
               {statuses.map((s) => (

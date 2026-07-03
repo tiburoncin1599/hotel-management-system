@@ -74,7 +74,7 @@ export function HotelInfoForm({ hotelInfo }: HotelInfoFormProps) {
               type="text"
               required
               defaultValue={hotelInfo.name}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
           <div>
@@ -86,7 +86,7 @@ export function HotelInfoForm({ hotelInfo }: HotelInfoFormProps) {
               name="logo"
               type="text"
               defaultValue={hotelInfo.logo}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
         </div>
@@ -100,7 +100,7 @@ export function HotelInfoForm({ hotelInfo }: HotelInfoFormProps) {
             name="address"
             rows={2}
             defaultValue={hotelInfo.address}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
 
@@ -114,7 +114,7 @@ export function HotelInfoForm({ hotelInfo }: HotelInfoFormProps) {
               name="phone"
               type="text"
               defaultValue={hotelInfo.phone}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
           <div>
@@ -126,7 +126,7 @@ export function HotelInfoForm({ hotelInfo }: HotelInfoFormProps) {
               name="email"
               type="email"
               defaultValue={hotelInfo.email}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
         </div>
@@ -141,7 +141,7 @@ export function HotelInfoForm({ hotelInfo }: HotelInfoFormProps) {
               name="website"
               type="text"
               defaultValue={hotelInfo.website}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
           <div>
@@ -153,7 +153,7 @@ export function HotelInfoForm({ hotelInfo }: HotelInfoFormProps) {
               name="currency"
               required
               defaultValue={hotelInfo.currency}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
             >
               {CURRENCIES.map((c) => (
                 <option key={c.code} value={c.code}>
@@ -173,7 +173,7 @@ export function HotelInfoForm({ hotelInfo }: HotelInfoFormProps) {
             name="timezone"
             required
             defaultValue={hotelInfo.timezone}
-            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+            className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
           >
             {TIMEZONES.map((tz) => (
               <option key={tz} value={tz}>

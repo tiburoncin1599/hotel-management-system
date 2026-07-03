@@ -45,7 +45,7 @@ export function ReportFilters() {
           id="period"
           value={period}
           onChange={(e) => setParam('period', e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           aria-label="Seleccionar período"
         >
           <option value="daily">Diario</option>
@@ -69,7 +69,7 @@ export function ReportFilters() {
                 type="date"
                 value={dateFrom}
                 onChange={(e) => setParam('dateFrom', e.target.value)}
-                className="rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
               />
             </div>
           </div>
@@ -85,7 +85,7 @@ export function ReportFilters() {
                 type="date"
                 value={dateTo}
                 onChange={(e) => setParam('dateTo', e.target.value)}
-                className="rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
               />
             </div>
           </div>

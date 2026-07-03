@@ -72,7 +72,7 @@ export function PaymentsTable({ data, paymentMethods, currencies }: PaymentsTabl
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por referencia, cliente..."
-            className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+            className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
           />
         </form>
 
@@ -88,7 +88,7 @@ export function PaymentsTable({ data, paymentMethods, currencies }: PaymentsTabl
         <select
           value={searchParams.get('status') ?? ''}
           onChange={(e) => setParam('status', e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200"
         >
           <option value="">Todos los estados</option>
           {Object.entries(statusLabels).map(([code, label]) => (
@@ -101,7 +101,7 @@ export function PaymentsTable({ data, paymentMethods, currencies }: PaymentsTabl
         <select
           value={searchParams.get('paymentMethodId') ?? ''}
           onChange={(e) => setParam('paymentMethodId', e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200"
         >
           <option value="">Todos los métodos</option>
           {paymentMethods.map((pm) => (
@@ -114,7 +114,7 @@ export function PaymentsTable({ data, paymentMethods, currencies }: PaymentsTabl
         <select
           value={searchParams.get('currencyId') ?? ''}
           onChange={(e) => setParam('currencyId', e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200"
         >
           <option value="">Todas las monedas</option>
           {currencies.map((c) => (

@@ -98,7 +98,7 @@ export function CheckOutDialog({ bookingId, onClose }: CheckOutDialogProps) {
                   step={0.01}
                   value={damageCharges}
                   onChange={(e) => setDamageCharges(e.target.value)}
-                  className="block w-full rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none"
+                  className="block w-full rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none"
                   placeholder="0.00"
                 />
               </div>
@@ -115,7 +115,7 @@ export function CheckOutDialog({ bookingId, onClose }: CheckOutDialogProps) {
                 id="notes"
                 name="notes"
                 rows={2}
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 placeholder="Notas sobre el check-out..."
               />
             </div>

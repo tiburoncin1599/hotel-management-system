@@ -86,7 +86,7 @@ export function CancelBookingDialog({ bookingId, onClose }: CancelDialogProps) {
               id="reason"
               name="reason"
               rows={2}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
               placeholder="Por ejemplo: Cliente canceló por imprevisto..."
             />
           </div>

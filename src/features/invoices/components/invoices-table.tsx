@@ -69,7 +69,7 @@ export function InvoicesTable({ data }: InvoicesTableProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por cliente, número o reserva..."
-            className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 bg-white transition-all duration-200 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </form>
       </div>
@@ -78,7 +78,7 @@ export function InvoicesTable({ data }: InvoicesTableProps) {
         <select
           value={searchParams.get('status') ?? ''}
           onChange={(e) => setParam('status', e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm transition-all duration-200 focus:border-blue-500 focus:outline-none"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white transition-all duration-200 focus:border-blue-500 focus:outline-none"
           aria-label="Filtrar por estado"
         >
           <option value="">Todos los estados</option>

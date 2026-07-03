@@ -80,7 +80,7 @@ export function UsersSection({ users, roles }: UsersSectionProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar usuarios..."
-            className="w-72 rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+            className="w-72 rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
         <button
@@ -193,7 +193,7 @@ export function UsersSection({ users, roles }: UsersSectionProps) {
                   name="email"
                   type="email"
                   required
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
               <div>
@@ -205,7 +205,7 @@ export function UsersSection({ users, roles }: UsersSectionProps) {
                   name="password"
                   type="password"
                   required
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
               <div>
@@ -216,7 +216,7 @@ export function UsersSection({ users, roles }: UsersSectionProps) {
                   id="roleId"
                   name="roleId"
                   required
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
                 >
                   <option value="">Seleccionar rol</option>
                   {roles.map((r) => (

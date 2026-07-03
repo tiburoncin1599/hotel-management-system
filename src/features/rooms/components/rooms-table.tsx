@@ -64,7 +64,7 @@ export function RoomsTable({ data, statuses, types }: RoomsTableProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por número..."
-            className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+            className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
           />
         </form>
 
@@ -80,7 +80,7 @@ export function RoomsTable({ data, statuses, types }: RoomsTableProps) {
         <select
           value={searchParams.get('statusId') ?? ''}
           onChange={(e) => setParam('statusId', e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200"
           aria-label="Filtrar por estado"
         >
           <option value="">Todos los estados</option>
@@ -94,7 +94,7 @@ export function RoomsTable({ data, statuses, types }: RoomsTableProps) {
         <select
           value={searchParams.get('roomTypeId') ?? ''}
           onChange={(e) => setParam('roomTypeId', e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200"
           aria-label="Filtrar por tipo"
         >
           <option value="">Todos los tipos</option>

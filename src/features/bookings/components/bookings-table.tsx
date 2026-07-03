@@ -77,7 +77,7 @@ export function BookingsTable({ data, statuses }: BookingsTableProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por cliente, habitación o ID..."
-            className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
+            className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm text-gray-900 placeholder-gray-400 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/20"
           />
         </form>
 
@@ -93,7 +93,7 @@ export function BookingsTable({ data, statuses }: BookingsTableProps) {
         <select
           value={searchParams.get('statusId') ?? ''}
           onChange={(e) => setParam('statusId', e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200"
           aria-label="Filtrar por estado"
         >
           <option value="">Todos los estados</option>
@@ -112,7 +112,7 @@ export function BookingsTable({ data, statuses }: BookingsTableProps) {
           type="date"
           value={searchParams.get('dateFrom') ?? ''}
           onChange={(e) => setParam('dateFrom', e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none"
         />
 
         <label className="sr-only" htmlFor="date-to">
@@ -123,7 +123,7 @@ export function BookingsTable({ data, statuses }: BookingsTableProps) {
           type="date"
           value={searchParams.get('dateTo') ?? ''}
           onChange={(e) => setParam('dateTo', e.target.value)}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none"
         />
 
         <select
@@ -134,7 +134,7 @@ export function BookingsTable({ data, statuses }: BookingsTableProps) {
             params.set('page', '1');
             router.push(`/dashboard/reservas?${params.toString()}`);
           }}
-          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none transition-all duration-200"
+          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white focus:border-blue-500 focus:outline-none transition-all duration-200"
           aria-label="Ordenar por"
         >
           <option value="createdAt">Creación</option>
