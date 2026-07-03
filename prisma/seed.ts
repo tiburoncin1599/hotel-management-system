@@ -96,6 +96,53 @@ async function main() {
     });
     statusMap[s.code] = created.id;
   }
+  // --- Booking Statuses ---
+  const bookingStatuses = [
+    {
+      code: 'pending',
+      name: 'Pendiente',
+      description: 'Reserva pendiente de confirmación',
+      color: '#f59e0b',
+    },
+    {
+      code: 'confirmed',
+      name: 'Confirmada',
+      description: 'Reserva confirmada',
+      color: '#10b981',
+    },
+    {
+      code: 'checked_in',
+      name: 'Check In',
+      description: 'Huésped registrado',
+      color: '#3b82f6',
+    },
+    {
+      code: 'checked_out',
+      name: 'Check Out',
+      description: 'Estadía finalizada',
+      color: '#6b7280',
+    },
+    {
+      code: 'cancelled',
+      name: 'Cancelada',
+      description: 'Reserva cancelada',
+      color: '#ef4444',
+    },
+  ];
+
+  for (const status of bookingStatuses) {
+    await prisma.bookingStatus.upsert({
+      where: {
+        code: status.code,
+      },
+      update: {
+        name: status.name,
+        description: status.description,
+        color: status.color,
+      },
+      create: status,
+    });
+  }
 
   // --- Amenities ---
   const amenityData = [
@@ -206,53 +253,6 @@ async function main() {
         },
       });
     }
-  }
-  // --- Booking Statuses ---
-  const bookingStatuses = [
-    {
-      code: 'pending',
-      name: 'Pendiente',
-      description: 'Reserva pendiente de confirmación',
-      color: '#f59e0b',
-    },
-    {
-      code: 'confirmed',
-      name: 'Confirmada',
-      description: 'Reserva confirmada',
-      color: '#10b981',
-    },
-    {
-      code: 'checked_in',
-      name: 'Check In',
-      description: 'Huésped registrado',
-      color: '#3b82f6',
-    },
-    {
-      code: 'checked_out',
-      name: 'Check Out',
-      description: 'Estadía finalizada',
-      color: '#6b7280',
-    },
-    {
-      code: 'cancelled',
-      name: 'Cancelada',
-      description: 'Reserva cancelada',
-      color: '#ef4444',
-    },
-  ];
-
-  for (const status of bookingStatuses) {
-    await prisma.bookingStatus.upsert({
-      where: {
-        code: status.code,
-      },
-      update: {
-        name: status.name,
-        description: status.description,
-        color: status.color,
-      },
-      create: status,
-    });
   }
 
   // --- Sample Customers ---
